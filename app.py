@@ -3,7 +3,7 @@ from finprompt.openai_client import generate_code_from_prompt
 from finprompt.code_utils import clean_code_output, run_generated_code, is_valid_python
 from finprompt.session import api_key_widget
 from finprompt.config import APP_TITLE, DATASOURCE_DISPLAY_NAMES
-from finprompt.rate_limit import get_user_ip, check_and_increment_ip_limit, get_ip_limit_reset_seconds
+from finprompt.rate_limit import get_user_ip, check_and_increment_ip_limit, get_ip_limit_reset_seconds, MAX_REQUESTS_PER_IP
 from importlib import import_module
 from finprompt.logger import log_prompt_supabase
 
@@ -13,7 +13,8 @@ def main():
 
     st.caption("⚠️ Beta sürecinde kullanıcı sorguları ve hata mesajları iyileştirme amacıyla anonim bir şekilde kaydedilir.")
 
-    st.write("OpenAI API anahtarınızı aşağıdaki alana girdiğinizde tüm özellikleri tam erişimle kullanabilirsiniz. Dilerseniz bu alanı boş bırakıp ücretsiz sürümle (5 istek/saat) devam edebilirsiniz.")
+    st.write(f"OpenAI API anahtarınızı aşağıdaki alana girdiğinizde tüm özellikleri tam erişimle kullanabilirsiniz. Dilerseniz bu alanı boş bırakıp ücretsiz sürümle (günde {MAX_REQUESTS_PER_IP} sorgu) devam edebilirsiniz.")
+    # st.write("OpenAI API anahtarınızı aşağıdaki alana girdiğinizde tüm özellikleri tam erişimle kullanabilirsiniz. Dilerseniz bu alanı boş bırakıp ücretsiz sürümle (5 istek/saat) devam edebilirsiniz.")
 
     api_key, using_default = api_key_widget()
 
@@ -58,11 +59,14 @@ def main():
             if not allowed:
                 reset_sec = get_ip_limit_reset_seconds(ip)
                 mins, secs = divmod(reset_sec, 60)
-                st.warning(f"Ücretsiz limit aşıldı. {mins} dk {secs} sn sonra tekrar deneyin veya kendi API anahtarınızı kullanın.")
+                hours, mins = divmod(mins, 60)
+                st.warning(f"Ücretsiz günlük limit aşıldı. {hours} saat {mins} dakika sonra tekrar deneyin veya kendi API anahtarınızı kullanın.")
+                # st.warning(f"Ücretsiz limit aşıldı. {mins} dk {secs} sn sonra tekrar deneyin veya kendi API anahtarınızı kullanın.")
                 log_prompt_supabase(user_input, error_message="Ücretsiz limit aşıldı.")
                 return
             else:
-                st.info(f"Kalan ücretsiz hakkınız: **{remaining}**")
+                st.info(f"Kalan ücretsiz günlük hakkınız: **{remaining}**")
+                # st.info(f"Kalan ücretsiz hakkınız: **{remaining}**")
 
         try:
             with st.spinner("Kod üretiliyor..."):
