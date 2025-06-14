@@ -1,3 +1,4 @@
+import streamlit as st
 import requests
 import redis
 from finprompt.config import REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_DB
@@ -14,12 +15,23 @@ redis_client = redis.Redis(
 MAX_REQUESTS_PER_IP = 5
 WINDOW_SECONDS = 3600
 
+# def get_user_ip():
+#     try:
+#         ip = requests.get('https://api.ipify.org', timeout=5).text
+#     except Exception:
+#         ip = "unknown"
+#     return ip
+
 def get_user_ip():
     try:
         ip = requests.get('https://api.ipify.org', timeout=5).text
+        if not ip or ip.strip().lower() == "unknown":
+            st.warning("Kullanıcı IP adresi alınamadı. Ücretsiz erişim devre dışı bırakıldı, lütfen kendi API anahtarınızı kullanın.")
+            return None
+        return ip
     except Exception:
-        ip = "unknown"
-    return ip
+        st.warning("Kullanıcı IP adresi alınamadı. Ücretsiz erişim devre dışı bırakıldı, lütfen kendi API anahtarınızı kullanın.")
+        return None
 
 def check_and_increment_ip_limit(ip):
     key = f"ip_limit:{ip}"

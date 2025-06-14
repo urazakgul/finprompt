@@ -50,6 +50,10 @@ def main():
 
         if using_default:
             ip = get_user_ip()
+            if not ip:
+                st.warning("Kullanıcı IP adresiniz alınamadı. Ücretsiz erişim kapalı. Lütfen kendi OpenAI API anahtarınızı kullanın.")
+                log_prompt_supabase(user_input, error_message="IP alınamadı, ücretsiz erişim devre dışı.")
+                return
             allowed, remaining = check_and_increment_ip_limit(ip)
             if not allowed:
                 reset_sec = get_ip_limit_reset_seconds(ip)
