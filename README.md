@@ -11,7 +11,7 @@ FinPrompt, **doğal dilde finansal veri sorgularını otomatik olarak Python kod
 - **Kolay API Anahtarı Yönetimi:** Kendi OpenAI API anahtarınızı girebilir veya ücretsiz (sınırlı) modda kullanabilirsiniz.
 - **Kullanıcı Dostu Arayüz:** Tüm kullanılabilir sütunlar ve örnek sorgular gösterilir.
 - **Veri Kaynağı Seçimi:** Şimdilik sadece İş Yatırım kullanılmaktadır.
-- **Kullanım Limiti:** Ücretsiz modda saatlik 5 sorgu hakkı bulunmaktadır.
+- **Kullanım Limiti:** Ücretsiz modda günde 25 sorgu hakkınız bulunur. Limitler her gece 00:00'da sıfırlanır.
 
 ---
 
@@ -77,15 +77,15 @@ streamlit run app.py
 
 - Kod üretiminde ChatGPT API (gpt-4o) kullanılır.
 - Sütun eşleştirmede yalnızca `COLUMN_DESCRIPTIONS` sözlüğündeki başlıklar dikkate alınır. Fuzzy matching yapılmaz.
-- Sonuçlar otomatik olarak bir DataFrame’e aktarılır.
-- Sorgular ve hata mesajları, geliştiriciye iletilmek üzere anonim olarak Supabase’e loglanır.
+- Sonuçlar otomatik olarak bir DataFrame'e aktarılır.
+- Sorgular ve hata mesajları, geliştiriciye iletilmek üzere anonim olarak Supabase'e loglanır.
 
 ---
 
 ## ⚡ Bilinen Kısıtlamalar
 
 - Şu anda yalnızca İş Yatırım veri kaynağı destekleniyor.
-- Ücretsiz modda saatlik 5 sorgu sınırı var.
+- Ücretsiz modda günde 25 sorgu sınırı var.
 - Üretilen kodun çalışabilmesi için verilen sorgunun anlamlı ve yeterli olması gerekir.
 - Tüm veri alanlarını çekmek için "Kullanılabilir Sütunlar" kısmındaki başlıkları kullanın.
 
