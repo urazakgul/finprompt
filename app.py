@@ -72,8 +72,6 @@ def main():
                 code = clean_code_output(code)
                 st.session_state.generated_code = code
 
-            log_prompt_supabase(user_input)
-
             with st.expander("Python kodunu göster"):
                 st.code(st.session_state.generated_code, language="python")
 

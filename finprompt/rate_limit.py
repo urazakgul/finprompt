@@ -15,17 +15,6 @@ redis_client = redis.Redis(
 
 MAX_REQUESTS_PER_IP = 25
 
-# def get_user_ip():
-#     try:
-#         ip = requests.get('https://api.ipify.org', timeout=5).text
-#         if not ip or ip.strip().lower() == "unknown":
-#             st.warning("Kullanıcı IP adresi alınamadı. Ücretsiz erişim devre dışı bırakıldı, lütfen kendi API anahtarınızı kullanın.")
-#             return None
-#         return ip
-#     except Exception:
-#         st.warning("Kullanıcı IP adresi alınamadı. Ücretsiz erişim devre dışı bırakıldı, lütfen kendi API anahtarınızı kullanın.")
-#         return None
-
 def get_user_ip():
     try:
         ip = requests.get('https://api.ipify.org', timeout=5).text
