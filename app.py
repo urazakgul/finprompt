@@ -14,7 +14,6 @@ def main():
     st.caption("⚠️ Beta sürecinde kullanıcı sorguları ve hata mesajları iyileştirme amacıyla anonim bir şekilde kaydedilir.")
 
     st.write(f"OpenAI API anahtarınızı aşağıdaki alana girdiğinizde tüm özellikleri tam erişimle kullanabilirsiniz. Dilerseniz bu alanı boş bırakıp ücretsiz sürümle (günde {MAX_REQUESTS_PER_IP} sorgu) devam edebilirsiniz.")
-    # st.write("OpenAI API anahtarınızı aşağıdaki alana girdiğinizde tüm özellikleri tam erişimle kullanabilirsiniz. Dilerseniz bu alanı boş bırakıp ücretsiz sürümle (5 istek/saat) devam edebilirsiniz.")
 
     api_key, using_default = api_key_widget()
 
@@ -31,7 +30,7 @@ def main():
 
     with st.expander("Örnek Sorgular"):
         st.markdown("""
-        - 2024 yılı için AKBNK ve THYAO hisselerinin aylık ortalama verilerini göster
+        - 2024 yılı için AKBNK ve THYAO hisselerinin aylık ortalama kapanış verilerini göster
         - SISE'nin Ocak-Mart 2025 kapanış fiyatlarını getir
         - TUPRS hissesinin son 7 iş günündeki en düşük ve en yüksek değerlerini getir
         """)
@@ -61,12 +60,10 @@ def main():
                 mins, secs = divmod(reset_sec, 60)
                 hours, mins = divmod(mins, 60)
                 st.warning(f"Ücretsiz günlük limit aşıldı. {hours} saat {mins} dakika sonra tekrar deneyin veya kendi API anahtarınızı kullanın.")
-                # st.warning(f"Ücretsiz limit aşıldı. {mins} dk {secs} sn sonra tekrar deneyin veya kendi API anahtarınızı kullanın.")
                 log_prompt_supabase(user_input, error_message="Ücretsiz limit aşıldı.")
                 return
             else:
                 st.info(f"Kalan ücretsiz günlük hakkınız: **{remaining}**")
-                # st.info(f"Kalan ücretsiz hakkınız: **{remaining}**")
 
         try:
             with st.spinner("Kod üretiliyor..."):

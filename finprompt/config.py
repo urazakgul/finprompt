@@ -15,3 +15,5 @@ DATASOURCE_DISPLAY_NAMES = {
 }
 
 DEFAULT_API_KEY = OPENAI_API_KEY
+
+ENV = st.secrets.get("ENV", "prod")

@@ -1,5 +1,6 @@
 from supabase import create_client
 import streamlit as st
+from finprompt.config import ENV
 
 def get_supabase_client():
     url = st.secrets["SUPABASE_URL"]
@@ -7,6 +8,8 @@ def get_supabase_client():
     return create_client(url, key)
 
 def log_prompt_supabase(user_prompt, error_message=None):
+    if ENV != "prod":
+        return
     supabase = get_supabase_client()
     data = {
         "user_prompt": user_prompt,
