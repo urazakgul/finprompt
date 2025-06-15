@@ -6,6 +6,7 @@ from finprompt.config import APP_TITLE, DATASOURCE_DISPLAY_NAMES
 from finprompt.rate_limit import get_user_ip, check_and_increment_ip_limit, get_ip_limit_reset_seconds, MAX_REQUESTS_PER_IP
 from importlib import import_module
 from finprompt.logger import log_prompt_supabase
+import traceback
 
 def main():
     st.set_page_config(page_title=APP_TITLE, layout="wide")
@@ -82,10 +83,12 @@ def main():
                 return
 
             with st.spinner("Kod çalıştırılıyor..."):
-                run_generated_code(st.session_state.generated_code)
+                run_generated_code(st.session_state.generated_code, user_input)
         except Exception as exc:
-            log_prompt_supabase(user_input, error_message=str(exc))
+            tb_str = traceback.format_exc()
+            log_prompt_supabase(user_input, error_message=tb_str)
             st.error(f"Kod çalıştırılırken bir hata oluştu:\n\n{exc}")
+            st.info("Bu hata kayıt altına alındı ve incelenecektir.")
 
 if __name__ == "__main__":
     main()

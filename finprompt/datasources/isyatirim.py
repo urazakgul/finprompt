@@ -73,6 +73,8 @@ Follow these strict instructions:
     - Code that executes and returns a DataFrame named `df` with the required columns
 14. Do **not** include explanations, comments, markdown, or print statements. Return **only** clean, executable Python code.
 15. Use only standard libraries, `requests`, and `pandas`.
+16. If the user's request is **not meaningful** or lacks financial/stock-related context (e.g., unrelated emotional, philosophical, or vague questions), **do not generate code**. Instead, return either an empty string or raise:
+    raise ValueError("Prompt geçersiz.")
 
 COLUMN_DESCRIPTIONS = {COLUMN_DESCRIPTIONS}
 """
