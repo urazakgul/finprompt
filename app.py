@@ -35,7 +35,7 @@ def main():
         - TUPRS hissesinin son 7 iş günündeki en düşük ve en yüksek değerlerini getir
         """)
 
-    user_input = st.text_input("Sorgunuz", help="Örnek: 2025 yılı için AKBNK hisse verilerini getir")
+    user_input = st.text_input("Sorgunuz", help="Örnek: 2025 yılı için AKBNK hissesi kapanış verilerini getir")
     model = "gpt-4o"
 
     if "generated_code" not in st.session_state:
