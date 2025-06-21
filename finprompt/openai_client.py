@@ -4,15 +4,27 @@ from importlib import import_module
 from finprompt.logger import log_prompt_supabase
 import traceback
 
-def load_prompt_for_datasource(datasource):
+def load_prompt_for_datasource(datasource, data_mode, financial_group_display=None):
     module = import_module(f"finprompt.datasources.{datasource}")
-    return module.get_prompt()
+    if datasource == "isyatirim":
+        if data_mode == "historical":
+            return module.get_prompt_historical()
+        elif data_mode == "financial":
+            return module.get_prompt_financial(financial_group_display)
+    return ""
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def generate_code_from_prompt(user_prompt: str, api_key: str, datasource: str, model: str = "gpt-4o") -> str:
+def generate_code_from_prompt(
+    user_prompt: str,
+    api_key: str,
+    datasource: str,
+    data_mode: str = "historical",
+    model: str = "gpt-4o",
+    financial_group_display: str = None
+) -> str:
     try:
         client = openai.OpenAI(api_key=api_key)
-        system_message = load_prompt_for_datasource(datasource)
+        system_message = load_prompt_for_datasource(datasource, data_mode, financial_group_display)
         response = client.chat.completions.create(
             model=model,
             messages=[

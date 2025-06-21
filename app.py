@@ -23,18 +23,52 @@ def main():
     display_to_key = {v: k for k, v in DATASOURCE_DISPLAY_NAMES.items()}
     datasource = display_to_key[selected_display]
 
+    data_mode = "historical"
+    if datasource == "isyatirim":
+        mode_display = st.selectbox(
+            "Veri Türü",
+            options=["Tarihsel Veriler", "Finansal Tablolar"],
+            key="isyatirim_mode"
+        )
+        data_mode = "historical" if mode_display == "Tarihsel Veriler" else "financial"
+
     ds_module = import_module(f"finprompt.datasources.{datasource}")
 
-    with st.expander("Kullanılabilir Sütunlar"):
-        for col, desc in ds_module.COLUMN_DESCRIPTIONS.items():
-            st.markdown(f"- **{col}**: {desc}")
+    if datasource == "isyatirim" and data_mode == "historical":
+        with st.expander("Kullanılabilir Sütunlar"):
+            for col, desc in ds_module.COLUMN_DESCRIPTIONS.items():
+                st.markdown(f"- **{col}**: {desc}")
 
-    with st.expander("Örnek Sorgular"):
-        st.markdown("""
-        - 2024 yılı için AKBNK ve THYAO hisselerinin aylık ortalama kapanış verilerini göster
-        - SISE'nin Ocak-Mart 2025 kapanış fiyatlarını getir
-        - TUPRS hissesinin son 7 iş günündeki en düşük ve en yüksek değerlerini getir
-        """)
+        with st.expander("Örnek Sorgular"):
+            st.markdown("""
+            - 2024 yılı için AKBNK ve THYAO hisselerinin aylık ortalama kapanış verilerini göster
+            - SISE'nin Ocak-Mart 2025 kapanış fiyatlarını getir
+            - TUPRS hissesinin son 7 iş günündeki en düşük ve en yüksek değerlerini getir
+            """)
+    elif datasource == "isyatirim" and data_mode == "financial":
+        with st.expander("Örnek Sorgular"):
+            st.markdown("""
+            - 2023 ve 2024 yılları için AKBNK ve THYAO'nun finansal tablolarını getir
+            - SISE'nin son 4 çeyrek finansal tablosu
+            - TUPRS'ın bu yıla ait tablolarını TRY ve USD cinsinden getir
+            """)
+        fin_group_display = st.radio(
+            "Finansal Tablo Tipi",
+            [
+                "Solo (Bağımsız) Mali Tablo (SPK Seri: XI, No:29)",
+                "Konsolide Mali Tablo (UFRS/IFRS)",
+                "Solo Mali Tablo (UFRS/IFRS)"
+            ],
+            index=0,
+            horizontal=True,
+            key="fin_group"
+        )
+        if fin_group_display == "Solo (Bağımsız) Mali Tablo (SPK Seri: XI, No:29)":
+            financial_group = "XI_29"
+        elif fin_group_display == "Konsolide Mali Tablo (UFRS/IFRS)":
+            financial_group = "UFRS"
+        elif fin_group_display == "Solo Mali Tablo (UFRS/IFRS)":
+            financial_group = "UFRS_K"
 
     user_input = st.text_input("Sorgunuz", help="Örnek: 2025 yılı için AKBNK hissesi kapanış verilerini getir")
     model = "gpt-4o"
@@ -66,9 +100,12 @@ def main():
             else:
                 st.info(f"Kalan ücretsiz günlük hakkınız: **{remaining}**")
 
+        if not (datasource == "isyatirim" and data_mode == "financial"):
+            fin_group_display = None
+
         try:
             with st.spinner("Kod üretiliyor..."):
-                code = generate_code_from_prompt(user_input, api_key, datasource, model)
+                code = generate_code_from_prompt(user_input, api_key, datasource, data_mode, model, financial_group_display=fin_group_display)
                 code = clean_code_output(code)
                 st.session_state.generated_code = code
 
