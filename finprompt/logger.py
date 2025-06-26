@@ -1,21 +1,22 @@
-from supabase import create_client
-import streamlit as st
-from finprompt.config import ENV
+# from supabase import create_client
+# import streamlit as st
+# from finprompt.config import ENV
 
-def get_supabase_client():
-    url = st.secrets["SUPABASE_URL"]
-    key = st.secrets["SUPABASE_KEY"]
-    return create_client(url, key)
+# def get_supabase_client():
+#     url = st.secrets["SUPABASE_URL"]
+#     key = st.secrets["SUPABASE_KEY"]
+#     return create_client(url, key)
 
 def log_prompt_supabase(user_prompt, error_message=None):
-    if ENV != "prod":
-        return
-    supabase = get_supabase_client()
-    data = {
-        "user_prompt": user_prompt,
-        "error_message": error_message or ""
-    }
-    try:
-        supabase.table("prompt_logs").insert(data).execute()
-    except Exception as e:
-        st.warning(f"Prompt loglanamadı: {e}")
+    pass
+    # if ENV != "prod":
+    #     return
+    # supabase = get_supabase_client()
+    # data = {
+    #     "user_prompt": user_prompt,
+    #     "error_message": error_message or ""
+    # }
+    # try:
+    #     supabase.table("prompt_logs").insert(data).execute()
+    # except Exception as e:
+    #     st.warning(f"Prompt loglanamadı: {e}")
