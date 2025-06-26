@@ -2,7 +2,7 @@
 
 > ⚠️ **DİKKAT:**
 > Geliştirme geçici süreyle askıya alınmıştır.
-> Uygulama sadece kendi OpenAI API anahtarınız ile çalışır. Ücretsiz API, sorgu limiti ve hata log mekanizması devre dışıdır.
+> Uygulama sadece kendi OpenAI API anahtarınız ile çalışır. Ücretsiz API, sorgu limiti ve log mekanizması devre dışıdır.
 
 **FinPrompt**, doğal dilde finansal veri sorgularınızı otomatik olarak Python koduna çevirip çalıştıran, kullanıcı dostu bir finansal analiz uygulamasıdır. Şu an beta aşamasında olup, **İş Yatırım** verileriyle çalışmaktadır.
 
